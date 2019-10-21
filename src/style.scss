@@ -1,0 +1,24 @@
+
+.hero {
+  background-image: url("https://peterauto.peter.fr/wp-content/uploads/FTA_16LMC_FTA_16LMC_DSC_2974.jpg");
+  background-size: cover
+}
+.page-wrapper{
+  background-image: url("http://speedhunters-wp-production.s3.amazonaws.com/wp-content/uploads/2019/10/13180651/IMG_7556Amirs-F40-For-SpeedHunters-By-Naveed-Yousufzai.jpg");
+  background-size: cover
+}
+
+
+.is-horizontal-flex {
+  display: flex;
+}
+.is-flex-child {
+  // display: inline;
+  margin: auto 5px auto 5px;
+}
+.navbar-menu {
+  background-color: black;
+}
+.warning-message {
+  background-color: red;
+}

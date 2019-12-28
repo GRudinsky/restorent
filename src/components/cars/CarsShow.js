@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import Auth from '../../lib/auth'
-// import ReviewsCard from './ReviewsCard'
+
 
 class CarsShow extends React.Component {
   constructor() {
@@ -15,18 +15,11 @@ class CarsShow extends React.Component {
     this.handleReviewSubmit = this.handleReviewSubmit.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
   }
-  isCarOwner() {
-    return Auth.getPayload().sub === this.state.car.user._id
+ 
+  isOwner(value) {
+    return Auth.getPayload().sub === value
   }
-  handleReviewDelete(e) {
-    const commentId = e.target.id
-    // console.log('clicked', commentId)
-    axios.delete(`/api/cars/${this.state.car._id}/comments/${commentId}`, {
-      headers: { Authorization: `Bearer ${Auth.getToken()}` }
-    })
-      .then(res => this.setState({ car: res.data }))
-      .catch(err => console.log(err))
-  }
+
   handleChange(e) {
     const data = { ...this.state.text, [e.target.name]: e.target.value }
     this.setState({ data })
@@ -40,18 +33,30 @@ class CarsShow extends React.Component {
       .then(res => this.setState({ car: res.data }))
       .catch(err => this.setState({ errors: err.response.data.errors }))
   }
+  handleReviewDelete(e) {
+    if (confirm('Are you sure about this?')) {
+      const commentId = e.target.id
+      axios.delete(`/api/cars/${this.state.car._id}/comments/${commentId}`, {
+        headers: { Authorization: `Bearer ${Auth.getToken()}` }
+      })
+        .then(res => this.setState({ car: res.data }))
+        .catch(err => console.log(err))
+    }
+  }
   commentTime(value) {
     const time = new Date(value)
     return `${time.getFullYear()}-${time.getMonth()}-${time.getDate()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
 
   }
   handleDelete() {
-    const carId = this.props.match.params.id
-    axios.delete(`/api/cars/${carId}`, {
-      headers: { Authorization: `Bearer ${Auth.getToken()}` }
-    })
-      .then(() => this.props.history.push('/cars'))
-      .catch(err => console.log(err))
+    if (confirm('Are you sure about this?')) {
+      const carId = this.props.match.params.id
+      axios.delete(`/api/cars/${carId}`, {
+        headers: { Authorization: `Bearer ${Auth.getToken()}` }
+      })
+        .then(() => this.props.history.push('/cars'))
+        .catch(err => console.log(err))
+    }
   }
 
   componentDidMount() {
@@ -62,7 +67,6 @@ class CarsShow extends React.Component {
       .catch(err => console.log(err))
   }
   render() {
-    // console.log('rendering showpage', this.state)
     if (!this.state.car) return null
     const { car } = this.state
     return (
@@ -77,18 +81,15 @@ class CarsShow extends React.Component {
               </figure>
             </div>
             <div className="column is-half">
-
               <p className="subtitle is-5">{`Year Produced: ${car.yearOfMake}`}</p>
               <p className="subtitle is-5">{`Mileage: ${car.mileage}`}</p>
               <p className="subtitle is-5">{`Fuel type: ${car.fuelType}`}</p>
-              <p className="subtitle is-5">{`Owned by: ${this.isCarOwner() && 'You' || car.user.username}`}</p>
+              <p className="subtitle is-5">{`Owned by: ${this.isOwner(this.state.car.user._id) && 'You' || car.user.username}`}</p>
               <p className="subtitle is-5">{`Currently Available for bookings: ${car.isAvailable && 'Yes' || 'No'}`}</p>
-             
               <hr />
-            
               <h2 className="title is-5">{`Daily Price: ${car.price}£`}</h2>
               <hr />
-              {this.isCarOwner() &&
+              {this.isOwner(this.state.car.user._id) &&
                 <div className="field is-grouped">
                   <Link to={`/cars/${car._id}/edit`} className="button is-link">
                     Edit car
@@ -102,10 +103,10 @@ class CarsShow extends React.Component {
           <div className="column">
             <h4 className="title is-4">Reviews:</h4>
             {car.comments.map(comment => (
-              <article className="message is-link" key={comment._id}>
+              <article className="message is-dark" key={comment._id}>
                 <div className="message-header">
-                  <p>{`${this.commentTime(comment.createdAt)} By: ${Auth.getPayload().sub === comment.user._id && 'You' || comment.user.username}`}</p>
-                  {Auth.getPayload().sub === comment.user._id &&
+                  <p>{`${this.commentTime(comment.createdAt)} By: ${this.isOwner(comment.user._id) && 'You' || comment.user.username}`}</p>
+                  {this.isOwner(comment.user._id) &&
                     <>
                       <button id={comment._id} onClick={this.handleReviewDelete} className="delete" aria-label="delete"></button>
                     </>}
@@ -137,7 +138,6 @@ class CarsShow extends React.Component {
                     </div>
                   </div>
                 </div>
-
               </>}
           </div>
         </div>

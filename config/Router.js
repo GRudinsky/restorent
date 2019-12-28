@@ -27,5 +27,8 @@ router.route('/login')
 
 router.route('/profile')
   .get(secureRoute, users.profile)
+  .put(secureRoute, users.editProfile)
+
+  
 
 module.exports = router

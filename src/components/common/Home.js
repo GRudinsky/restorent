@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Home = () => (
-  <section className="hero is-fullheight-with-navbar">
+  <section className="hero is-fullheight-with-navbar home-screen">
     <div className="hero-body">
       <div className="container">
         <h1 className="title is-1 has-text-white ">
@@ -12,12 +12,6 @@ const Home = () => (
         </h2>
       </div>
     </div>
-    <section className="section">
-      <div className="container">
-        <div className="columns is-mobile is-multiline">
-        </div>
-      </div>
-    </section>
   </section>
 )
 

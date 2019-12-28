@@ -1,94 +1,57 @@
 import React from 'react'
 import axios from 'axios'
+import ProfileForm from './ProfileForm'
+import SplashScreen from '../common/SplashScreen'
 
 class Register extends React.Component {
   constructor() {
     super()
     this.state = {
-      data: {
+      profile: {
       },
-      errors: {}
+      errors: {},
+      loading: false
     }
+    this.splashMessage = 'You\'re all set. Now please log in.'
+    this.formTitle = 'Create An Account'
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
+  toggleLoading() {
+    const loading = true
+    this.setState({ loading })
+  }
   handleChange(e) {
-    const data = { ...this.state.data, [e.target.name]: e.target.value }
-    console.log(data)
-    this.setState({ data })
+    const profile = { ...this.state.profile, [e.target.name]: e.target.value }
+    console.log(profile)
+    this.setState({ profile })
   }
   handleSubmit(e) {
     e.preventDefault()
-    console.log('submitting', this.state)
-    axios.post('/api/register', this.state.data)
+    console.log('submitting', this.state.profile)
+    axios.post('/api/register', this.state.profile)
       .then(res => console.log(res.data))
-      .then(() => this.props.history.push('/login'))
+      .then(() => {
+        this.toggleLoading()
+        setTimeout(() => this.props.history.push('/login'), 2000)
+      })
       .catch(err => this.setState({ errors: err }))
   }
   render() {
     console.log('rendering', this.state.errors)
-
+    if (this.state.loading) return (
+      <SplashScreen
+        message={this.splashMessage}
+      />
+    )
     return (
-      <section className="section">
-        <div className="container">
-          <form onSubmit={this.handleSubmit}>
-            <h2 className="title">Register</h2>
-            {this.state.errors.message &&
-              <div className="field">
-                <div className="control">
-                  <button type="button" disabled className="button is-danger is-fullwidth">There was a problem with your registration. All below fields are required.</button>
-                </div>
-              </div>}
-            <div className="field">
-              <label className="label">Username</label>
-              <div className="control">
-                <input
-                  className="input"
-                  name="username"
-                  placeholder="Username"
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Email</label>
-              <div className="control">
-                <input
-                  className="input"
-                  name="email"
-                  placeholder="Email"
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Password</label>
-              <div className="control">
-                <input
-                  className="input"
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Password Confirmation</label>
-              <div className="control">
-                <input
-                  className="input"
-                  name="passwordConfirmation"
-                  type="password"
-                  placeholder="Password Confirmation"
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <button type="submit" className="button is-link is-fullwidth">Register</button>
-          </form>
-        </div>
-      </section>
+      <ProfileForm
+        profile={this.state.profile}
+        errors={this.state.errors}
+        handleChange={this.handleChange}
+        handleSubmit={this.handleSubmit}
+        formTitle={this.formTitle}
+      />
     )
   }
 }

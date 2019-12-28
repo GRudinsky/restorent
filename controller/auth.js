@@ -28,8 +28,23 @@ function profile(req, res) {
     .then(user => res.status(200).json(user))
     .catch(err => res.json(err))
 }
+// profile edit route
+function editProfile(req, res, next) {
+  User
+    .findById(req.currentUser._id)
+    .then(user => {
+      if (!user) return res.status(404).json({ message: 'Not Found' })
+      if (!user._id.equals(req.currentUser._id)) return res.status(401).json({ message: 'Unauthorized' })
+      req.body.user = req.currentUser
+      return user.set(req.body)
+    })
+    .then(user => user.save())
+    .then(user => res.status(202).json(user))
+    .catch(next)
+}
 module.exports = {
   register,
   login,
-  profile
+  profile,
+  editProfile
 }

@@ -13,6 +13,7 @@ import Home from './components/common/Home'
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
 import Profile from './components/auth/Profile'
+import ProfileEdit from './components/auth/ProfileEdit'
 
 const App = () => (
   <BrowserRouter>
@@ -26,6 +27,7 @@ const App = () => (
         <Route path="/cars" component={CarsIndex} />
         <Route path="/register" component={Register} />
         <Route path="/login" component={Login} />
+        <Route path="/profile/edit" component={ProfileEdit} />
         <Route path="/profile" component={Profile} />
       </Switch>
     </main>

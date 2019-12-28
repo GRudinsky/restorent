@@ -1,7 +1,8 @@
 import React from 'react'
 
-const CarsForm = ({ data, handleChange, handleSubmit, errors }) => (
+const CarsForm = ({ data, handleChange, handleSubmit, errors, formTitle }) => (
   <form onSubmit={handleSubmit}>
+    <h2 className="title">{formTitle}</h2>
     <div className="field is-horizontal">
       <div className="field-body">
         <div className="field">
@@ -144,7 +145,7 @@ const CarsForm = ({ data, handleChange, handleSubmit, errors }) => (
       </div>
     </div>
 
-    <button type="submit" className="button is-link is-fullwidth">Create Car</button>
+    <button type="submit" className="button is-link is-fullwidth">{formTitle}</button>
   </form>
 )
 

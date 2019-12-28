@@ -14,7 +14,6 @@ userSchema.plugin(require('mongoose-unique-validator'))
 userSchema.set('toJSON', {
   transform(doc, json) {
     delete json.password
-    delete json.email
     return json
   }
 })

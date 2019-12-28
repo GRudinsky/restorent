@@ -13,6 +13,7 @@ class CarsNew extends React.Component {
       },
       errors: {}
     }
+    this.formTitle = 'Create Your Car'
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -47,6 +48,7 @@ class CarsNew extends React.Component {
             handleChange={this.handleChange}
             handleSubmit={this.handleSubmit}
             errors={this.state.errors}
+            formTitle = {this.formTitle}
           />
         </div>
       </section>

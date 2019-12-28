@@ -13,6 +13,7 @@ class CarsEdit extends React.Component {
       },
       errors: {}
     }
+    this.formTitle = 'Edit Your Car'
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleToggle = this.handleToggle.bind(this)
@@ -60,6 +61,7 @@ class CarsEdit extends React.Component {
             handleSubmit={this.handleSubmit}
             handleToggle={this.handleToggle}
             errors={this.state.errors}
+            formTitle={this.formTitle}
           />
         </div>
       </section>
